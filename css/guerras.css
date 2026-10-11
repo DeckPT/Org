@@ -1,0 +1,960 @@
+/* =========================================
+   EQUIPA ORGs - GUERRAS
+========================================= */
+
+
+/* =========================================
+   SECÇÃO PRINCIPAL
+========================================= */
+
+.guerras-section{
+
+    width:90%;
+
+    max-width:1400px;
+
+    margin:auto;
+
+    padding:60px 0 90px;
+
+}
+
+
+/* =========================================
+   TOP 3 - PÓDIO
+========================================= */
+
+.ranking-guerras{
+
+    width:90%;
+
+    max-width:1100px;
+
+    margin:0 auto;
+
+    padding:65px 0 80px;
+
+}
+
+
+.ranking-titulo{
+
+    text-align:center;
+
+    margin-bottom:45px;
+
+}
+
+
+.ranking-titulo span{
+
+    display:inline-block;
+
+    color:#60a5fa;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:3px;
+
+    margin-bottom:8px;
+
+}
+
+
+.ranking-titulo h2{
+
+    margin:0 0 8px;
+
+    font-size:34px;
+
+}
+
+
+.ranking-titulo p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+
+/* =========================================
+   PÓDIO
+========================================= */
+
+.podio-guerras{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    gap:22px;
+
+    min-height:390px;
+
+}
+
+
+/* =========================================
+   LUGARES
+========================================= */
+
+.podio-lugar{
+
+    width:250px;
+
+    text-align:center;
+
+    position:relative;
+
+}
+
+
+/* 2.º LUGAR */
+
+.podio-lugar.segundo{
+
+    order:1;
+
+}
+
+
+/* 1.º LUGAR */
+
+.podio-lugar.primeiro{
+
+    order:2;
+
+    transform:translateY(-25px);
+
+}
+
+
+/* 3.º LUGAR */
+
+.podio-lugar.terceiro{
+
+    order:3;
+
+}
+
+
+/* =========================================
+   MEDALHAS
+========================================= */
+
+.podio-medal{
+
+    font-size:42px;
+
+    line-height:1;
+
+    margin-bottom:14px;
+
+}
+
+
+/* =========================================
+   IMAGEM DO PÓDIO
+========================================= */
+
+.podio-foto{
+
+    width:100%;
+
+    height:165px;
+
+    overflow:hidden;
+
+    background:#020617;
+
+    border:1px solid #334155;
+
+    border-radius:15px 15px 0 0;
+
+}
+
+
+.podio-foto img{
+
+    width:100%;
+
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+
+/* Efeito ao passar o rato */
+
+.podio-lugar:hover
+.podio-foto img{
+
+    transform:scale(1.05);
+
+}
+
+
+/* =========================================
+   DESTAQUE 1.º LUGAR
+========================================= */
+
+.podio-lugar.primeiro{
+
+    filter:drop-shadow(
+        0 15px 25px
+        rgba(37,99,235,.12)
+    );
+
+}
+
+
+.podio-lugar.primeiro .podio-foto{
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 30px
+        rgba(37,99,235,.20);
+
+}
+
+
+/* =========================================
+   BASE DO PÓDIO
+========================================= */
+
+.podio-base{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1e293b,
+            #0f172a
+        );
+
+    border:1px solid #334155;
+
+    border-top:none;
+
+    border-radius:0 0 12px 12px;
+
+    color:#cbd5e1;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+}
+
+
+/* =========================================
+   ALTURA DOS LUGARES
+========================================= */
+
+/* 2.º */
+
+.podio-lugar.segundo .podio-base{
+
+    height:75px;
+
+}
+
+
+/* 1.º */
+
+.podio-lugar.primeiro .podio-base{
+
+    height:105px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #334155,
+            #172033
+        );
+
+    border-color:#2563eb;
+
+}
+
+
+/* 3.º */
+
+.podio-lugar.terceiro .podio-base{
+
+    height:50px;
+
+}
+
+
+/* =========================================
+   LINHA DE SEPARAÇÃO
+========================================= */
+
+.ranking-guerras::after{
+
+    content:"";
+
+    display:block;
+
+    width:100%;
+
+    height:1px;
+
+    margin-top:75px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #1e293b,
+            transparent
+        );
+
+}
+
+
+/* =========================================
+   TOPO
+========================================= */
+
+.guerras-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:30px;
+
+    margin-bottom:35px;
+
+}
+
+
+.guerras-top h2{
+
+    font-size:30px;
+
+    margin-bottom:6px;
+
+}
+
+
+.guerras-top p{
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+
+/* =========================================
+   CONTADOR
+========================================= */
+
+.contador{
+
+    min-width:180px;
+
+    padding:18px 25px;
+
+    background:#111827;
+
+    border:1px solid #1e293b;
+
+    border-radius:12px;
+
+    text-align:center;
+
+}
+
+
+.contador strong{
+
+    display:block;
+
+    color:#60a5fa;
+
+    font-size:28px;
+
+    line-height:1;
+
+    margin-bottom:6px;
+
+}
+
+
+.contador span{
+
+    color:#64748b;
+
+    font-size:12px;
+
+}
+
+
+/* =========================================
+   GRID
+========================================= */
+
+.guerras-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:25px;
+
+}
+
+
+/* =========================================
+   CARTÃO DA GUERRA
+========================================= */
+
+.guerra-card{
+
+    background:#111827;
+
+    border:1px solid #1e293b;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    transition:
+
+        transform .3s ease,
+
+        border-color .3s ease,
+
+        box-shadow .3s ease;
+
+    animation:
+        guerraEntrada .5s ease both;
+
+}
+
+
+.guerra-card:hover{
+
+    transform:translateY(-7px);
+
+    border-color:#334155;
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,0,0,.35);
+
+}
+
+
+@keyframes guerraEntrada{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+/* =========================================
+   IMAGEM
+========================================= */
+
+.guerra-imagem{
+
+    position:relative;
+
+    height:220px;
+
+    overflow:hidden;
+
+    background:#020617;
+
+}
+
+
+.guerra-imagem::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent 40%,
+            rgba(0,0,0,.75)
+        );
+
+    pointer-events:none;
+
+}
+
+
+.guerra-imagem img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+
+.guerra-card:hover
+.guerra-imagem img{
+
+    transform:scale(1.06);
+
+}
+
+
+/* =========================================
+   DATA
+========================================= */
+
+.guerra-data{
+
+    position:absolute;
+
+    z-index:2;
+
+    left:15px;
+
+    bottom:15px;
+
+    padding:7px 12px;
+
+    background:rgba(0,0,0,.65);
+
+    border:1px solid
+        rgba(255,255,255,.15);
+
+    border-radius:8px;
+
+    backdrop-filter:blur(8px);
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+/* =========================================
+   INFORMAÇÃO
+========================================= */
+
+.guerra-info{
+
+    padding:22px;
+
+}
+
+
+/* =========================================
+   CONFRONTO
+========================================= */
+
+.confronto{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr auto 1fr;
+
+    align-items:center;
+
+    gap:10px;
+
+    text-align:center;
+
+    min-height:55px;
+
+}
+
+
+.confronto span{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    line-height:1.4;
+
+}
+
+
+.confronto b{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    background:#1e293b;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+}
+
+
+/* =========================================
+   VENCEDOR
+========================================= */
+
+.vencedor{
+
+    margin-top:20px;
+
+    padding-top:15px;
+
+    border-top:1px solid #1e293b;
+
+    text-align:center;
+
+    font-size:13px;
+
+    color:#94a3b8;
+
+}
+
+
+.vencedor strong{
+
+    margin-left:4px;
+
+}
+
+
+/* =========================================
+   CORES DOS VENCEDORES
+========================================= */
+
+.vencedor-blue strong{
+
+    color:#60a5fa;
+
+}
+
+
+.vencedor-green strong{
+
+    color:#4ade80;
+
+}
+
+
+.vencedor-orange strong{
+
+    color:#fb923c;
+
+}
+
+
+.vencedor-pendente{
+
+    color:#64748b;
+
+}
+
+
+.vencedor-pendente strong{
+
+    color:#94a3b8;
+
+}
+
+
+/* =========================================
+   RESPONSIVO - TABLET
+========================================= */
+
+@media(max-width:1100px){
+
+    .guerras-grid{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+    }
+
+}
+
+
+/* =========================================
+   RESPONSIVO - PÓDIO
+========================================= */
+
+@media(max-width:800px){
+
+    .ranking-guerras{
+
+        width:92%;
+
+        padding-top:50px;
+
+    }
+
+
+    .podio-guerras{
+
+        gap:10px;
+
+    }
+
+
+    .podio-lugar{
+
+        width:32%;
+
+    }
+
+
+    .podio-lugar.primeiro{
+
+        transform:translateY(-15px);
+
+    }
+
+
+    .podio-foto{
+
+        height:130px;
+
+    }
+
+
+    .podio-medal{
+
+        font-size:32px;
+
+    }
+
+}
+
+
+/* =========================================
+   RESPONSIVO - TELEMÓVEL
+========================================= */
+
+@media(max-width:750px){
+
+    .guerras-section{
+
+        width:92%;
+
+        padding-top:45px;
+
+    }
+
+
+    .guerras-top{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .contador{
+
+        width:100%;
+
+    }
+
+
+    .guerras-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+/* =========================================
+   TELEMÓVEL PEQUENO
+========================================= */
+
+@media(max-width:500px){
+
+    .ranking-titulo h2{
+
+        font-size:28px;
+
+    }
+
+
+    .podio-guerras{
+
+        gap:6px;
+
+        min-height:280px;
+
+    }
+
+
+    .podio-foto{
+
+        height:95px;
+
+    }
+
+
+    .podio-medal{
+
+        font-size:25px;
+
+        margin-bottom:8px;
+
+    }
+
+
+    .podio-base{
+
+        font-size:8px;
+
+        letter-spacing:.5px;
+
+    }
+
+
+    .podio-lugar.segundo .podio-base{
+
+        height:55px;
+
+    }
+
+
+    .podio-lugar.primeiro .podio-base{
+
+        height:75px;
+
+    }
+
+
+    .podio-lugar.terceiro .podio-base{
+
+        height:40px;
+
+    }
+
+
+    .guerra-imagem{
+
+        height:200px;
+
+    }
+
+
+    .confronto{
+
+        gap:6px;
+
+    }
+
+
+    .confronto span{
+
+        font-size:12px;
+
+    }
+
+
+    .confronto b{
+
+        width:34px;
+
+        height:34px;
+
+        font-size:10px;
+
+    }
+
+}
+
+
+/* =========================================
+   TELEMÓVEL MUITO PEQUENO
+========================================= */
+
+@media(max-width:380px){
+
+    .podio-medal{
+
+        font-size:21px;
+
+    }
+
+
+    .podio-base{
+
+        font-size:7px;
+
+    }
+
+
+    .podio-foto{
+
+        height:80px;
+
+    }
+
+}

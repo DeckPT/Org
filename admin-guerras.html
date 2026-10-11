@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe FacS | Gestão de Guerras e Facções</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        select, select option {
+            background-color: #18181d !important;
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <img src="img/logoOrgs.png" alt="Equipe FacS">
+    </div>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="facs.html">Facções</a>
+        <a href="guerras.html" class="active">Guerras</a>
+        <a href="contacto.html">Contactos</a>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="admin-header">
+        <span>PAINEL PRIVADO</span>
+        <h1>Gestão de Guerras e Facções</h1>
+        <p>Gere os respetivos confrontos entre as organizações.</p>
+    </div>
+
+    <!-- LOGIN -->
+    <section id="loginBox" class="admin-card">
+        <h2>Entrar</h2>
+        <input type="email" id="email" placeholder="Email" autocomplete="email">
+        <input type="password" id="password" placeholder="Palavra-passe" autocomplete="current-password">
+        <button id="loginBtn">Entrar no painel</button>
+        <p id="loginMessage" class="admin-message"></p>
+    </section>
+
+    <!-- PAINEL DE ADMINISTRAÇÃO -->
+    <section id="adminPanel" class="admin-card" style="display: none;">
+        <div class="admin-panel-top" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <span>ADMINISTRADOR</span>
+                <h2>Painel de Controlo</h2>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="admin.html" class="btn" style="background: #2563eb; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; display: inline-block;">⚙️ Painel Admin (Facções)</a>
+                <button id="logoutBtn" class="logout">Terminar sessão</button>
+            </div>
+        </div>
+
+        <!-- FORMULÁRIO PARA ADICIONAR NOVA GUERRA -->
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; margin-bottom: 30px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.08);">
+            <h3 style="color: #fff; margin-bottom: 10px;">Adicionar Nova Guerra</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                
+                <label style="color: #aaa; font-size: 0.9rem;">Facção 1:</label>
+                <select id="novaFaccao1" style="padding: 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none;">
+                    <option value="">A carregar facções...</option>
+                </select>
+
+                <label style="color: #aaa; font-size: 0.9rem;">Facção 2:</label>
+                <select id="novaFaccao2" style="padding: 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none;">
+                    <option value="">A carregar facções...</option>
+                </select>
+
+                <label style="color: #aaa; font-size: 0.9rem;">Estado da Guerra:</label>
+                <select id="novoEstadoGuerra" style="padding: 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none;">
+                    <option value="A decorrer">🔴 A decorrer</option>
+                    <option value="Terminada">🟢 Terminada</option>
+                </select>
+
+                <label style="color: #aaa; font-size: 0.9rem;">Vencedor:</label>
+                <input type="text" id="novoVencedor" placeholder="Vencedor (opcional, se terminada)" style="padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; outline: none;">
+                
+                <label style="color: #aaa; font-size: 0.9rem;">Link da Foto/Banner (Visível para ambos os lados):</label>
+                <input type="text" id="novaFoto" placeholder="https://exemplo.com/imagem.png" style="padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; outline: none;">
+                
+                <button id="btnAdicionarGuerra" class="guardar" style="cursor: pointer; padding: 12px; margin-top: 5px; text-align: center; border: none; border-radius: 9px; font-weight: 700;">Criar Guerra</button>
+            </div>
+            <p id="saveMessage" class="admin-message" style="margin-top: 15px; text-align: left;"></p>
+        </div>
+
+        <h3 style="color: #fff; margin-bottom: 10px;">Confrontos Registados</h3>
+        <div id="listaAdminGuerras" style="display: flex; flex-direction: column; gap: 15px;"></div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Equipe FacS</p>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCUx0QmBQvMHklMa9-lrxCVFlAIMlhRJj8",
+        authDomain: "orgs-login.firebaseapp.com",
+        projectId: "orgs-login",
+        storageBucket: "orgs-login.firebasestorage.app",
+        messagingSenderId: "321179116371",
+        appId: "1:321179116371:web:7191bb684463a0478f786",
+        measurementId: "G-WC46KFXQT7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginBox = document.getElementById("loginBox");
+    const adminPanel = document.getElementById("adminPanel");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMessage = document.getElementById("loginMessage");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const listaAdminGuerras = document.getElementById("listaAdminGuerras");
+    const saveMessage = document.getElementById("saveMessage");
+    const btnAdicionarGuerra = document.getElementById("btnAdicionarGuerra");
+
+    let listaFaccoesGlobal = [];
+
+    loginBtn.addEventListener("click", async () => {
+        try {
+            await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+            loginMessage.textContent = "";
+        } catch (error) {
+            loginMessage.textContent = "Erro ao iniciar sessão. Verifica os dados.";
+        }
+    });
+
+    password.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            loginBtn.click();
+        }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            loginBox.style.display = "none";
+            adminPanel.style.display = "block";
+            await carregarFaccoesDropdowns();
+            await carregarGuerrasAdmin();
+        } else {
+            loginBox.style.display = "block";
+            adminPanel.style.display = "none";
+        }
+    });
+
+    logoutBtn.addEventListener("click", () => signOut(auth));
+
+    async function carregarFaccoesDropdowns() {
+        try {
+            const snapshot = await getDocs(collection(db, "faccoes"));
+            listaFaccoesGlobal = [];
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const nomeFaccao = data.nome || data.titulo || docSnap.id;
+                if (!listaFaccoesGlobal.includes(nomeFaccao)) {
+                    listaFaccoesGlobal.push(nomeFaccao);
+                }
+            });
+
+            listaFaccoesGlobal.sort();
+
+            const select1 = document.getElementById("novaFaccao1");
+            const select2 = document.getElementById("novaFaccao2");
+
+            select1.innerHTML = '<option value="" style="background-color: #18181d; color: #fff;">Seleciona a Facção 1</option>';
+            select2.innerHTML = '<option value="" style="background-color: #18181d; color: #fff;">Seleciona a Facção 2</option>';
+
+            listaFaccoesGlobal.forEach(nome => {
+                select1.innerHTML += `<option value="${nome}" style="background-color: #18181d; color: #fff;">${nome}</option>`;
+                select2.innerHTML += `<option value="${nome}" style="background-color: #18181d; color: #fff;">${nome}</option>`;
+            });
+
+        } catch (error) {
+            console.error("Erro ao carregar facções:", error);
+        }
+    }
+
+    btnAdicionarGuerra.addEventListener("click", async () => {
+        const faccao1 = document.getElementById("novaFaccao1").value;
+        const faccao2 = document.getElementById("novaFaccao2").value;
+        const estado = document.getElementById("novoEstadoGuerra").value;
+        const vencedor = document.getElementById("novoVencedor").value.trim();
+        const foto = document.getElementById("novaFoto").value.trim();
+
+        if (!faccao1 || !faccao2) {
+            saveMessage.style.color = "#ff4444";
+            saveMessage.textContent = "Seleciona as duas facções.";
+            return;
+        }
+
+        if (faccao1 === faccao2) {
+            saveMessage.style.color = "#ff4444";
+            saveMessage.textContent = "Uma facção não pode entrar em guerra consigo mesma!";
+            return;
+        }
+
+        btnAdicionarGuerra.disabled = true;
+        btnAdicionarGuerra.textContent = "A criar guerra...";
+
+        try {
+            await addDoc(collection(db, "guerras"), {
+                faccao1,
+                faccao2,
+                estado,
+                vencedor: vencedor || "Nenhum",
+                foto: foto
+            });
+            saveMessage.style.color = "#4BB543";
+            saveMessage.textContent = "Guerra adicionada com sucesso e publicada!";
+            document.getElementById("novaFaccao1").value = "";
+            document.getElementById("novaFaccao2").value = "";
+            document.getElementById("novoVencedor").value = "";
+            document.getElementById("novaFoto").value = "";
+            await carregarGuerrasAdmin();
+        } catch (error) {
+            console.error(error);
+            saveMessage.style.color = "#ff4444";
+            saveMessage.textContent = "Erro ao adicionar guerra.";
+        } finally {
+            btnAdicionarGuerra.disabled = false;
+            btnAdicionarGuerra.textContent = "Criar Guerra";
+        }
+    });
+
+    async function carregarGuerrasAdmin() {
+        listaAdminGuerras.innerHTML = "<p>A carregar...</p>";
+        try {
+            const snapshot = await getDocs(collection(db, "guerras"));
+            listaAdminGuerras.innerHTML = "";
+
+            if (snapshot.empty) {
+                listaAdminGuerras.innerHTML = "<p>Sem guerras registadas.</p>";
+                return;
+            }
+
+            snapshot.forEach((documento) => {
+                const dados = documento.data();
+                const id = documento.id;
+
+                let opcoesFaccao1 = `<option value="" style="background-color: #18181d; color: #fff;">Selecione</option>`;
+                let opcoesFaccao2 = `<option value="" style="background-color: #18181d; color: #fff;">Selecione</option>`;
+
+                listaFaccoesGlobal.forEach(nome => {
+                    opcoesFaccao1 += `<option value="${nome}" ${dados.faccao1 === nome ? "selected" : ""} style="background-color: #18181d; color: #fff;">${nome}</option>`;
+                    opcoesFaccao2 += `<option value="${nome}" ${dados.faccao2 === nome ? "selected" : ""} style="background-color: #18181d; color: #fff;">${nome}</option>`;
+                });
+
+                const card = document.createElement("div");
+                card.className = "admin-faccao";
+                card.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin: 10px 0; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px;">
+                        <label style="font-size: 13px; color: #aaa;">Facção 1:</label>
+                        <select class="edit-faccao1" style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">${opcoesFaccao1}</select>
+                        
+                        <label style="font-size: 13px; color: #aaa;">Facção 2:</label>
+                        <select class="edit-faccao2" style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">${opcoesFaccao2}</select>
+
+                        <label style="font-size: 13px; color: #aaa;">Estado:</label>
+                        <select class="edit-estado" style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">
+                            <option value="A decorrer" ${dados.estado === "A decorrer" ? "selected" : ""} style="background-color: #18181d; color: #fff;">🔴 A decorrer</option>
+                            <option value="Terminada" ${dados.estado === "Terminada" ? "selected" : ""} style="background-color: #18181d; color: #fff;">🟢 Terminada</option>
+                        </select>
+
+                        <label style="font-size: 13px; color: #aaa;">Vencedor:</label>
+                        <input type="text" class="edit-vencedor" value="${dados.vencedor || ""}" style="padding: 8px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">
+                        
+                        <label style="font-size: 13px; color: #aaa;">Link da Foto/Banner:</label>
+                        <input type="text" class="edit-foto" value="${dados.foto || ""}" style="padding: 8px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;" placeholder="https://exemplo.com/imagem.png">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <button class="btn-atualizar guardar" style="flex: 1; padding: 10px; font-size: 0.9rem; cursor: pointer; border-radius: 8px; border: none; font-weight: 700;">Atualizar</button>
+                        <button class="btn-apagar" style="background: #8B0000; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 700;">Apagar</button>
+                    </div>
+                `;
+
+                const selectF1 = card.querySelector(".edit-faccao1");
+                const selectF2 = card.querySelector(".edit-faccao2");
+                const selectEstado = card.querySelector(".edit-estado");
+                const inputVencedor = card.querySelector(".edit-vencedor");
+                const inputFoto = card.querySelector(".edit-foto");
+                const btnAtualizar = card.querySelector(".btn-atualizar");
+                const btnApagar = card.querySelector(".btn-apagar");
+
+                btnAtualizar.addEventListener("click", async () => {
+                    try {
+                        await updateDoc(doc(db, "guerras", id), {
+                            faccao1: selectF1.value,
+                            faccao2: selectF2.value,
+                            estado: selectEstado.value,
+                            vencedor: inputVencedor.value.trim() || "Nenhum",
+                            foto: inputFoto.value.trim()
+                        });
+                        saveMessage.style.color = "#4BB543";
+                        saveMessage.textContent = "Guerra atualizada com sucesso!";
+                        carregarGuerrasAdmin();
+                    } catch (err) {
+                        console.error(err);
+                        saveMessage.style.color = "#ff4444";
+                        saveMessage.textContent = "Erro ao atualizar guerra.";
+                    }
+                });
+
+                btnApagar.addEventListener("click", async () => {
+                    if (confirm("Tens a certeza que queres apagar esta guerra?")) {
+                        try {
+                            await deleteDoc(doc(db, "guerras", id));
+                            saveMessage.style.color = "#4BB543";
+                            saveMessage.textContent = "Guerra apagada!";
+                            carregarGuerrasAdmin();
+                        } catch (err) {
+                            console.error(err);
+                            saveMessage.style.color = "#ff4444";
+                            saveMessage.textContent = "Erro ao apagar guerra.";
+                        }
+                    }
+                });
+
+                listaAdminGuerras.appendChild(card);
+            });
+        } catch (error) {
+            console.error(error);
+            listaAdminGuerras.innerHTML = "<p>Erro ao carregar guerras.</p>";
+        }
+    }
+</script>
+
+</body>
+</html>

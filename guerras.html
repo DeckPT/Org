@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe FacS | Guerras</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/guerras.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <img src="img/logoOrgs.png" alt="Equipe FacS">
+    </div>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="facs.html">Facções</a>
+        <a href="guerras.html" class="active">Guerras</a>
+        <a href="contacto.html">Contactos</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <div class="page-header-content">
+        <span class="page-tag">EQUIPE FACS</span>
+        <h1>Guerras</h1>
+        <p>Consulta o calendário e o histórico das guerras entre as organizações da cidade.</p>
+    </div>
+</section>
+
+<section class="ranking-guerras">
+    <div class="ranking-titulo">
+        <span>RANKING</span>
+        <h2>🏆 TOP 3</h2>
+        <p>As organizações com mais pontos (Vitória: +5 | Derrota: -2).</p>
+    </div>
+
+    <div class="podio-guerras">
+        <div class="podio-lugar segundo">
+            <div class="podio-medal">🥈</div>
+            <div class="podio-foto">
+                <img src="img/Guerras/podio.png" alt="2.º Lugar">
+            </div>
+            <div class="podio-base" id="podio2">
+                2.º LUGAR<br><small>-- pts</small>
+            </div>
+        </div>
+
+        <div class="podio-lugar primeiro">
+            <div class="podio-medal">🥇</div>
+            <div class="podio-foto">
+                <img src="img/Guerras/podio.png" alt="1.º Lugar">
+            </div>
+            <div class="podio-base" id="podio1">
+                1.º LUGAR<br><small>-- pts</small>
+            </div>
+        </div>
+
+        <div class="podio-lugar terceiro">
+            <div class="podio-medal">🥉</div>
+            <div class="podio-foto">
+                <img src="img/Guerras/podio.png" alt="3.º Lugar">
+            </div>
+            <div class="podio-base" id="podio3">
+                3.º LUGAR<br><small>-- pts</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="guerras-section">
+    <div class="guerras-top">
+        <div>
+            <h2>Histórico de Guerras</h2>
+            <p>Acompanha os confrontos realizados entre as diferentes organizações.</p>
+        </div>
+        <div class="contador">
+            <strong id="totalGuerras">0</strong>
+            <span>Guerras registadas</span>
+        </div>
+    </div>
+
+    <div class="guerras-grid" id="listaGuerras">
+        <p style="text-align: center; width: 100%; grid-column: 1 / -1;">A carregar guerras do Firestore...</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Equipe FacS • Todos os direitos reservados.</p>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCUx0QmBQvMHklMa9-lrxCVFlAIMlhRJj8",
+        authDomain: "orgs-login.firebaseapp.com",
+        projectId: "orgs-login",
+        storageBucket: "orgs-login.firebasestorage.app",
+        messagingSenderId: "321179116371",
+        appId: "1:321179116371:web:7191bb684463a0478f786",
+        measurementId: "G-WC46KFXQT7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const listaGuerras = document.getElementById("listaGuerras");
+    const totalGuerras = document.getElementById("totalGuerras");
+    const podio1 = document.getElementById("podio1");
+    const podio2 = document.getElementById("podio2");
+    const podio3 = document.getElementById("podio3");
+
+    onSnapshot(collection(db, "guerras"), (snapshot) => {
+        listaGuerras.innerHTML = "";
+        totalGuerras.textContent = snapshot.size;
+
+        if (snapshot.empty) {
+            listaGuerras.innerHTML = "<p style='text-align: center; width: 100%; grid-column: 1 / -1;'>Sem guerras registadas.</p>";
+            podio1.innerHTML = "1.º LUGAR<br><small>0 pts</small>";
+            podio2.innerHTML = "2.º LUGAR<br><small>0 pts</small>";
+            podio3.innerHTML = "3.º LUGAR<br><small>0 pts</small>";
+            return;
+        }
+
+        const pontuacoes = {};
+        const guerrasArray = [];
+
+        snapshot.forEach((doc) => {
+            const dados = doc.data();
+            guerrasArray.push(dados);
+
+            const fac1 = dados.faccao1;
+            const fac2 = dados.faccao2;
+            const vencedor = dados.vencedor;
+            const estado = dados.estado;
+
+            if (fac1 && !pontuacoes[fac1]) pontuacoes[fac1] = 0;
+            if (fac2 && !pontuacoes[fac2]) pontuacoes[fac2] = 0;
+
+            if (estado === "Terminada" && vencedor && vencedor !== "Nenhum") {
+                if (vencedor === fac1) {
+                    pontuacoes[fac1] += 5; 
+                    pontuacoes[fac2] -= 2; 
+                } else if (vencedor === fac2) {
+                    pontuacoes[fac2] += 5; 
+                    pontuacoes[fac1] -= 2; 
+                }
+            }
+        });
+
+        guerrasArray.forEach(dados => {
+            const card = document.createElement("article");
+            card.className = "guerra-card";
+
+            let classeVencedor = "vencedor-pendente";
+            let textoVencedor = "⚔️ A decorrer";
+
+            if (dados.estado === "Terminada") {
+                if (dados.vencedor && dados.vencedor !== "Nenhum") {
+                    classeVencedor = "vencedor-green";
+                    textoVencedor = `🏆 Vencedor: <strong>${dados.vencedor}</strong>`;
+                } else {
+                    classeVencedor = "vencedor-blue";
+                    textoVencedor = `🤝 Empate / Terminado`;
+                }
+            }
+
+            const imagemGuerra = dados.foto ? dados.foto : "img/guerra7.jpg";
+
+            card.innerHTML = `
+                <div class="guerra-imagem">
+                    <img src="${imagemGuerra}" alt="${dados.faccao1}" onerror="this.src='img/guerra7.jpg'">
+                    <span class="guerra-data">${dados.estado}</span>
+                </div>
+                <div class="guerra-info">
+                    <div class="confronto">
+                        <span>${dados.faccao1}</span>
+                        <b>VS</b>
+                        <span>${dados.faccao2}</span>
+                    </div>
+                    <div class="vencedor ${classeVencedor}">
+                        ${textoVencedor}
+                    </div>
+                </div>
+            `;
+            listaGuerras.appendChild(card);
+        });
+
+        const rankingOrdenado = Object.entries(pontuacoes).sort((a, b) => b[1] - a[1]);
+
+        podio1.innerHTML = rankingOrdenado[0] ? `1.º ${rankingOrdenado[0][0]}<br><small>${rankingOrdenado[0][1]} pts</small>` : "1.º LUGAR<br><small>0 pts</small>";
+        podio2.innerHTML = rankingOrdenado[1] ? `2.º ${rankingOrdenado[1][0]}<br><small>${rankingOrdenado[1][1]} pts</small>` : "2.º LUGAR<br><small>0 pts</small>";
+        podio3.innerHTML = rankingOrdenado[2] ? `3.º ${rankingOrdenado[2][0]}<br><small>${rankingOrdenado[2][1]} pts</small>` : "3.º LUGAR<br><small>0 pts</small>";
+    });
+</script>
+
+</body>
+</html>

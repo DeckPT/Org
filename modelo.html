@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Equipe ORGs | Facção</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/faccao-detalhes.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- =========================================
+    HEADER
+========================================= -->
+<header>
+    <div class="logo">
+        <img src="img/logoOrgs.png" alt="Equipe ORGs">
+    </div>
+
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="facs.html" class="active">Facções</a>
+        <a href="guerras.html">Guerras</a>
+        <a href="contacto.html">Contactos</a>
+    </nav>
+</header>
+
+<!-- =========================================
+    VOLTAR
+========================================= -->
+<div class="detalhes-container">
+
+    <a href="facs.html" class="voltar">← Voltar às facções</a>
+
+    <!-- =====================================
+         CABEÇALHO DA FACÇÃO
+    ====================================== -->
+    <section class="faccao-hero">
+        <div class="faccao-hero-overlay"></div>
+        <div class="faccao-hero-content">
+            <span class="detalhes-tag">ORGANIZAÇÃO</span>
+            <h1 id="heroNome">A carregar...</h1>
+            <span class="estado-grande" id="heroEstado">...</span>
+        </div>
+    </section>
+
+    <!-- =====================================
+         INFORMAÇÕES
+    ====================================== -->
+    <section class="informacoes-faccao">
+
+        <div class="info-principal">
+            <h2>Informações da Facção</h2>
+            <p>Aqui podes consultar todas as informações relacionadas com esta organização.</p>
+        </div>
+
+        <div class="info-grid">
+
+            <!-- ESTADO -->
+            <div class="info-box">
+                <span class="info-icon" id="iconeEstado">🔴</span>
+                <div>
+                    <small>Estado</small>
+                    <strong id="infoEstado">...</strong>
+                </div>
+            </div>
+
+            <!-- QG -->
+            <div class="info-box">
+                <span class="info-icon">📍</span>
+                <div>
+                    <small>QG</small>
+                    <strong id="infoQG">A carregar...</strong>
+                </div>
+            </div>
+
+            <!-- LÍDER -->
+            <div class="info-box">
+                <span class="info-icon">👑</span>
+                <div>
+                    <small>Liderança</small>
+                    <strong id="infoLider">Não divulgado</strong>
+                </div>
+            </div>
+
+            <!-- MEMBROS -->
+            <div class="info-box">
+                <span class="info-icon">👥</span>
+                <div>
+                    <small>Estado da organização</small>
+                    <strong>Ativa</strong>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================
+         VÍDEO DO QG
+    ====================================== -->
+    <section class="video-section">
+
+        <div class="section-heading">
+            <span>QG DA ORGANIZAÇÃO</span>
+            <h2>Conhece o QG</h2>
+            <p>Vê o vídeo para conhecer o espaço utilizado pela organização.</p>
+        </div>
+
+        <div class="video-container" id="videoContainer">
+            <div class="video-placeholder">
+                <div class="video-icon">▶</div>
+                <h3>Vídeo do QG</h3>
+                <p>O vídeo desta organização será disponibilizado aqui.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- =====================================
+         DESCRIÇÃO
+    ====================================== -->
+    <section class="descricao-section">
+
+        <div class="section-heading">
+            <span>SOBRE A ORGANIZAÇÃO</span>
+            <h2 id="descNome">Facção</h2>
+        </div>
+
+        <div class="descricao-box">
+            <p id="descricaoTexto">
+                Nesta área serão apresentadas as informações detalhadas da organização,
+                incluindo a sua história, funcionamento, requisitos e outras informações importantes.
+            </p>
+            <p>
+                As informações podem ser alteradas posteriormente de acordo com a organização
+                e com as decisões da Equipe ORGs.
+            </p>
+        </div>
+
+    </section>
+
+    <!-- =====================================
+         CONTACTO
+    ====================================== -->
+    <section class="suporte-faccao">
+        <h2>Queres saber mais?</h2>
+        <p>Para obter informações sobre a liderança ou candidatura à organização, entra no suporte oficial.</p>
+        <a href="https://discord.gg/2EGn9W54AD" target="_blank" rel="noopener noreferrer" class="btn">Entrar no suporte</a>
+    </section>
+
+</div>
+
+<!-- =========================================
+    FOOTER
+========================================= -->
+<footer>
+    <p>© 2026 Equipe ORGs • Todos os direitos reservados.</p>
+</footer>
+
+<!-- =========================================
+    JAVASCRIPT FIRESTORE
+========================================= -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCUx0QmBQvMHklMa9-lrxCVFlAIMlhRJj8",
+        authDomain: "orgs-login.firebaseapp.com",
+        projectId: "orgs-login",
+        storageBucket: "orgs-login.firebasestorage.app",
+        messagingSenderId: "321179116371",
+        appId: "1:321179116371:web:7191bb684463a0478f786",
+        measurementId: "G-WC46KFXQT7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Converte links normais do YouTube para o formato embed correto
+    function formatarYoutubeUrl(url) {
+        if (!url) return "";
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : url;
+    }
+
+    // Ler o ID que vem no URL (ex: modelo.html?id=toxic)
+    const urlParams = new URLSearchParams(window.location.search);
+    const faccaoId = urlParams.get("id");
+
+    if (!faccaoId) {
+        document.body.innerHTML = "<h2 style='color:#fff; text-align:center; margin-top:100px;'>Facção não especificada. <a href='facs.html' style='color:#00ffcc;'>Voltar</a></h2>";
+    } else {
+        const docRef = doc(db, "faccoes", faccaoId);
+
+        onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const dados = docSnap.data();
+                const nomeFaccao = dados.nome || faccaoId;
+                const estado = (dados.estado || "livre").toLowerCase().trim();
+
+                // Atualizar títulos e textos principais
+                document.getElementById("pageTitle").textContent = `Equipe ORGs | ${nomeFaccao}`;
+                document.getElementById("heroNome").textContent = nomeFaccao;
+                document.getElementById("descNome").textContent = nomeFaccao;
+                document.getElementById("infoQG").textContent = nomeFaccao;
+                
+                if (dados.descricao) {
+                    document.getElementById("descricaoTexto").textContent = dados.descricao;
+                }
+
+                const heroEstado = document.getElementById("heroEstado");
+                const infoEstado = document.getElementById("infoEstado");
+                const iconeEstado = document.getElementById("iconeEstado");
+                const infoLider = document.getElementById("infoLider");
+                const videoContainer = document.getElementById("videoContainer");
+
+                if (estado === "livre") {
+                    if (heroEstado) {
+                        heroEstado.textContent = "🟢 Livre";
+                        heroEstado.className = "estado-grande livre";
+                    }
+                    if (infoEstado) {
+                        infoEstado.textContent = "Livre";
+                        infoEstado.className = "texto-verde";
+                    }
+                    if (iconeEstado) iconeEstado.textContent = "🟢";
+
+                } else if (estado === "guerra") {
+                    if (heroEstado) {
+                        heroEstado.textContent = "🟠 Em Guerra";
+                        heroEstado.className = "estado-grande guerra";
+                    }
+                    if (infoEstado) {
+                        infoEstado.textContent = "Em Guerra";
+                        infoEstado.className = "texto-laranja";
+                    }
+                    if (iconeEstado) iconeEstado.textContent = "🟠";
+
+                } else {
+                    if (heroEstado) {
+                        heroEstado.textContent = "🔴 Ocupada";
+                        heroEstado.className = "estado-grande ocupado";
+                    }
+                    if (infoEstado) {
+                        infoEstado.textContent = "Ocupada";
+                        infoEstado.className = "texto-vermelho";
+                    }
+                    if (iconeEstado) iconeEstado.textContent = "🔴";
+                }
+
+                if (infoLider) {
+                    infoLider.textContent = dados.lideranca || "Não divulgado";
+                }
+
+                // Renderizar o vídeo (YouTube, Discord ou Ficheiro de Vídeo Direto)
+                if (videoContainer && dados.video && dados.video.trim() !== "") {
+                    const videoLink = dados.video.trim();
+
+                    if (videoLink.includes("youtube.com") || videoLink.includes("youtu.be")) {
+                        const embedUrl = formatarYoutubeUrl(videoLink);
+                        videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 12px; width: 100%; height: 100%;"></iframe>`;
+                    } else if (
+                        videoLink.includes("cdn.discordapp.com") || 
+                        videoLink.includes("media.discordapp.net") || 
+                        videoLink.endsWith(".mp4") || 
+                        videoLink.endsWith(".webm") || 
+                        videoLink.endsWith(".mov")
+                    ) {
+                        videoContainer.innerHTML = `<video controls autoplay loop muted style="width:100%; height:100%; border-radius:12px; object-fit:cover;"><source src="${videoLink}"></video>`;
+                    } else {
+                        // Caso seja um link genérico/desconhecido, tenta carregar num iframe
+                        videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${videoLink}" frameborder="0" allowfullscreen style="border-radius: 12px; width: 100%; height: 100%;"></iframe>`;
+                    }
+                }
+            } else {
+                document.body.innerHTML = "<h2 style='color:#fff; text-align:center; margin-top:100px;'>Facção não encontrada na base de dados. <a href='facs.html' style='color:#00ffcc;'>Voltar</a></h2>";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

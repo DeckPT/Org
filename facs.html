@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe FacS | Facções</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/faccoes.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <img src="img/logoOrgs.png" alt="Equipe FacS">
+    </div>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="facs.html" class="active">Facções</a>
+        <a href="guerras.html">Guerras</a>
+        <a href="contacto.html">Contactos</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <div class="page-header-content">
+        <span class="page-tag">EQUIPE FACS</span>
+        <h1>Facções</h1>
+        <p>Consulta as organizações da cidade, o seu estado atual e as informações disponíveis sobre cada uma.</p>
+    </div>
+</section>
+
+<main class="container">
+    <div class="faccoes-top">
+        <div>
+            <h2>Organizações</h2>
+            <p>Consulta o estado atual das facções.</p>
+        </div>
+        <div class="pesquisa-container">
+            <input type="text" id="pesquisaFaccoes" placeholder="Pesquisar facção..." autocomplete="off">
+        </div>
+    </div>
+
+    <div class="filtros">
+        <button class="filtro active" data-filtro="todas">Todas</button>
+        <button class="filtro" data-filtro="livre">🟢 Livres</button>
+        <button class="filtro" data-filtro="ocupada">🔴 Ocupadas</button>
+        <button class="filtro" data-filtro="guerra">🟠 Em Guerra</button>
+    </div>
+
+    <div class="faccoes-grid" id="listaFaccoes">
+        <p style="color: #fff; text-align: center; grid-column: 1 / -1;">A carregar facções...</p>
+    </div>
+
+    <div id="semResultados" class="sem-resultados" style="display: none;">
+        <span>🔍</span>
+        <h3>Nenhuma facção encontrada</h3>
+        <p>Tenta pesquisar por outro nome ou alterar o filtro.</p>
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 Equipe FacS • Todos os direitos reservados.</p>
+</footer>
+
+<script type="module" src="js/faccoes.js"></script>
+
+</body>
+</html>

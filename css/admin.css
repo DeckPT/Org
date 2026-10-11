@@ -1,0 +1,337 @@
+/* =========================================
+   EQUIPA ORGs
+   PAINEL DE ADMINISTRAÇÃO
+   ========================================= */
+
+.admin-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 50px auto;
+}
+
+
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.admin-header > span {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    opacity: 0.7;
+    margin-bottom: 10px;
+}
+
+.admin-header h1 {
+    margin: 0 0 10px;
+    font-size: 38px;
+}
+
+.admin-header p {
+    margin: 0;
+    opacity: 0.7;
+}
+
+
+/* =========================================
+   CARTÃO
+========================================= */
+
+.admin-card {
+    background: rgba(20, 20, 25, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+#loginBox {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+#loginBox h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+#loginBox input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    border-radius: 10px;
+
+    color: white;
+
+    outline: none;
+
+    font-family: inherit;
+
+    transition: 0.2s;
+}
+
+#loginBox input:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#loginBox input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+
+/* =========================================
+   BOTÕES
+========================================= */
+
+#loginBtn,
+.guardar {
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #111111;
+
+    font-family: inherit;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        opacity 0.2s,
+        box-shadow 0.2s;
+}
+
+#loginBtn {
+    width: 100%;
+    margin-top: 5px;
+}
+
+#loginBtn:hover,
+.guardar:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================
+   PAINEL
+========================================= */
+
+.admin-panel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-panel-top span {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.55;
+}
+
+.admin-panel-top h2 {
+    margin: 5px 0 0;
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+.logout {
+    padding: 10px 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: white;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.logout:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================
+   FACÇÕES
+========================================= */
+
+.admin-faccoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* =========================================
+   FACÇÃO INDIVIDUAL
+========================================= */
+
+.admin-faccao {
+    display: grid;
+
+    grid-template-columns:
+        minmax(180px, 1fr)
+        190px
+        auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 18px;
+
+    border-radius: 13px;
+
+    background: rgba(255, 255, 255, 0.035);
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    transition: 0.2s;
+}
+
+.admin-faccao:hover {
+    background: rgba(255, 255, 255, 0.055);
+}
+
+.admin-faccao small {
+    display: block;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    opacity: 0.5;
+
+    margin-bottom: 5px;
+}
+
+.admin-faccao h3 {
+    margin: 0;
+
+    font-size: 17px;
+}
+
+
+/* =========================================
+   SELECT
+========================================= */
+
+.admin-faccao select {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border-radius: 8px;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    background: #18181d;
+
+    color: white;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+.admin-faccao select:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================
+   MENSAGENS
+========================================= */
+
+.admin-message {
+    margin: 15px 0 0;
+
+    font-size: 14px;
+
+    opacity: 0.75;
+
+    text-align: center;
+}
+
+#saveMessage {
+    margin-top: 20px;
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 700px) {
+
+    .admin-container {
+        width: 92%;
+        margin: 30px auto;
+    }
+
+    .admin-card {
+        padding: 20px;
+    }
+
+    .admin-header h1 {
+        font-size: 28px;
+    }
+
+    .admin-panel-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-faccao {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-faccao .guardar {
+        width: 100%;
+    }
+
+}

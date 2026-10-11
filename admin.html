@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe FacS | Administração</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <img src="img/logoOrgs.png" alt="Equipe FacS">
+    </div>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="facs.html">Facções</a>
+        <a href="guerras.html">Guerras</a>
+        <a href="contacto.html">Contactos</a>
+    </nav>
+</header>
+
+<main class="admin-container">
+    <div class="admin-header">
+        <span>PAINEL PRIVADO</span>
+        <h1>Administração das Facções</h1>
+        <p>Adiciona facções em lote, altera estados, liderança, imagens, vídeos ou elimina organizações através deste painel.</p>
+    </div>
+
+    <!-- LOGIN -->
+    <section id="loginBox" class="admin-card">
+        <h2>Entrar</h2>
+        <input type="email" id="email" placeholder="Email" autocomplete="email">
+        <input type="password" id="password" placeholder="Palavra-passe" autocomplete="current-password">
+        <button id="loginBtn">Entrar no painel</button>
+        <p id="loginMessage" class="admin-message"></p>
+    </section>
+
+    <!-- PAINEL ADMIN -->
+    <section id="adminPanel" class="admin-card" style="display: none;">
+        <div class="admin-panel-top" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <span>ADMINISTRADOR</span>
+                <h2>Gestão de Facções</h2>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="admin-guerras.html" class="btn" style="background: #2563eb; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; display: inline-block;">⚔️ Painel Admin (Guerras)</a>
+                <button id="logoutBtn" class="logout">Terminar sessão</button>
+            </div>
+        </div>
+
+        <!-- ADICIONAR FACÇÕES EM MASSA (LOTE) -->
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.08);">
+            <h3 style="color: #fff; margin-top: 0; margin-bottom: 10px; font-size: 18px;">Adicionar Várias Facções em Lote</h3>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 12px;">Cola aqui a lista de facções (uma por linha ou separadas por vírgula):</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <textarea id="textoMultiplasFaccoes" rows="4" placeholder="Ex:&#10;Black Dragon&#10;Tequilas&#10;Toxic" style="width: 100%; box-sizing: border-box; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; font-family: inherit; outline: none;"></textarea>
+                <button id="btnAdicionarLote" class="guardar" style="width: 100%; text-align: center;">Guardar Todas no Firebase</button>
+            </div>
+            <p id="loteMessage" class="admin-message" style="text-align: left;"></p>
+        </div>
+
+        <!-- BARRA DE PESQUISA E FILTROS -->
+        <div style="margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" id="pesquisaAdmin" placeholder="🔍 Pesquisar facção por nome..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; background: #18181d; color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); outline: none; font-family: inherit;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="filtroEstado" style="font-weight: 700; font-size: 14px;">Filtrar:</label>
+                <select id="filtroEstado" style="padding: 10px 14px; border-radius: 8px; background: #18181d; color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); outline: none; cursor: pointer;">
+                    <option value="todas">Todas</option>
+                    <option value="livre">🟢 Apenas Livres</option>
+                    <option value="ocupada">🔴 Apenas Ocupadas</option>
+                    <option value="guerra">🟠 Em Guerra</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="adminFaccoes" class="admin-faccoes"></div>
+
+        <p id="saveMessage" class="admin-message"></p>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Equipe FacS</p>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCUx0QmBQvMHklMa9-lrxCVFlAIMlhRJj8",
+        authDomain: "orgs-login.firebaseapp.com",
+        projectId: "orgs-login",
+        storageBucket: "orgs-login.firebasestorage.app",
+        messagingSenderId: "321179116371",
+        appId: "1:321179116371:web:7191bb684463a0478f786",
+        measurementId: "G-WC46KFXQT7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginBox = document.getElementById("loginBox");
+    const adminPanel = document.getElementById("adminPanel");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMessage = document.getElementById("loginMessage");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const adminFaccoes = document.getElementById("adminFaccoes");
+    const saveMessage = document.getElementById("saveMessage");
+    const filtroEstado = document.getElementById("filtroEstado");
+    const pesquisaAdmin = document.getElementById("pesquisaAdmin");
+    
+    const btnAdicionarLote = document.getElementById("btnAdicionarLote");
+    const textoMultiplasFaccoes = document.getElementById("textoMultiplasFaccoes");
+    const loteMessage = document.getElementById("loteMessage");
+
+    let faccoesCache = [];
+
+    if (loginBtn) {
+        loginBtn.addEventListener("click", async () => {
+            const emailValue = email ? email.value.trim() : "";
+            const passwordValue = password ? password.value : "";
+
+            if (!emailValue || !passwordValue) {
+                if (loginMessage) loginMessage.textContent = "Preenche o email e a palavra-passe.";
+                return;
+            }
+
+            if (loginMessage) loginMessage.textContent = "A entrar...";
+            loginBtn.disabled = true;
+
+            try {
+                await signInWithEmailAndPassword(auth, emailValue, passwordValue);
+                if (loginMessage) loginMessage.textContent = "";
+            } catch (error) {
+                console.error("Erro Firebase:", error);
+                if (loginMessage) {
+                    if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+                        loginMessage.textContent = "Email ou palavra-passe incorretos.";
+                    } else {
+                        loginMessage.textContent = "Erro ao iniciar sessão.";
+                    }
+                }
+            } finally {
+                loginBtn.disabled = false;
+            }
+        });
+    }
+
+    if (password) {
+        password.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && loginBtn) {
+                loginBtn.click();
+            }
+        });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            if (loginBox) loginBox.style.display = "none";
+            if (adminPanel) adminPanel.style.display = "block";
+            await carregarFaccoes();
+        } else {
+            if (loginBox) loginBox.style.display = "block";
+            if (adminPanel) adminPanel.style.display = "none";
+        }
+    });
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    if (btnAdicionarLote) {
+        btnAdicionarLote.addEventListener("click", async () => {
+            const conteudo = textoMultiplasFaccoes ? textoMultiplasFaccoes.value.trim() : "";
+            if (!conteudo) {
+                if (loteMessage) {
+                    loteMessage.style.color = "#ff4444";
+                    loteMessage.textContent = "Escreve ou cola a lista de facções.";
+                }
+                return;
+            }
+
+            const linhas = conteudo.split(/\r?\n|,/).map(f => f.trim()).filter(f => f.length > 0);
+
+            if (linhas.length === 0) {
+                if (loteMessage) {
+                    loteMessage.style.color = "#ff4444";
+                    loteMessage.textContent = "Nenhuma facção válida encontrada.";
+                }
+                return;
+            }
+
+            if (loteMessage) {
+                loteMessage.style.color = "#fff";
+                loteMessage.textContent = `A guardar ${linhas.length} facções no Firebase...`;
+            }
+
+            try {
+                for (const nomeFaccao of linhas) {
+                    await addDoc(collection(db, "faccoes"), {
+                        nome: nomeFaccao,
+                        estado: "livre",
+                        lideranca: "",
+                        imagem: "",
+                        video: ""
+                    });
+                }
+
+                if (loteMessage) {
+                    loteMessage.style.color = "#4BB543";
+                    loteMessage.textContent = `${linhas.length} facções adicionadas com sucesso!`;
+                }
+                if (textoMultiplasFaccoes) textoMultiplasFaccoes.value = "";
+                await carregarFaccoes();
+            } catch (error) {
+                console.error("Erro ao adicionar facções em lote:", error);
+                if (loteMessage) {
+                    loteMessage.style.color = "#ff4444";
+                    loteMessage.textContent = "Ocorreu um erro ao guardar algumas facções.";
+                }
+            }
+        });
+    }
+
+    async function carregarFaccoes() {
+        if (!adminFaccoes) return;
+        adminFaccoes.innerHTML = "<p>A carregar facções...</p>";
+
+        try {
+            const snapshot = await getDocs(collection(db, "faccoes"));
+            faccoesCache = [];
+
+            if (snapshot.empty) {
+                adminFaccoes.innerHTML = "<p>Nenhuma facção encontrada no Firestore.</p>";
+                return;
+            }
+
+            snapshot.forEach((documento) => {
+                faccoesCache.push({
+                    id: documento.id,
+                    dados: documento.data()
+                });
+            });
+
+            renderizarFaccoes();
+        } catch (error) {
+            console.error("Erro ao carregar facções:", error);
+            adminFaccoes.innerHTML = "<p>Erro ao carregar as facções.</p>";
+        }
+    }
+
+    function renderizarFaccoes() {
+        if (!adminFaccoes) return;
+        adminFaccoes.innerHTML = "";
+
+        const termoPesquisa = pesquisaAdmin ? pesquisaAdmin.value.toLowerCase().trim() : "";
+        const filtro = filtroEstado ? filtroEstado.value.toLowerCase().trim() : "todas";
+
+        const faccoesFiltradas = faccoesCache.filter(item => {
+            const nomeFaccao = (item.dados.nome || item.id).toString().toLowerCase();
+            const estadoFaccao = (item.dados.estado || "livre").toString().toLowerCase().trim();
+
+            const BatePesquisa = nomeFaccao.includes(termoPesquisa);
+            const BateFiltro = (filtro === "todas") || (estadoFaccao === filtro);
+
+            return BatePesquisa && BateFiltro;
+        });
+
+        if (faccoesFiltradas.length === 0) {
+            adminFaccoes.innerHTML = "<p>Nenhuma facção corresponde à pesquisa ou filtro selecionado.</p>";
+            return;
+        }
+
+        faccoesFiltradas.forEach(item => {
+            criarCard(item.id, item.dados);
+        });
+    }
+
+    if (filtroEstado) {
+        filtroEstado.addEventListener("change", renderizarFaccoes);
+    }
+
+    if (pesquisaAdmin) {
+        pesquisaAdmin.addEventListener("input", renderizarFaccoes);
+    }
+
+    function criarCard(id, dados) {
+        const card = document.createElement("div");
+        card.className = "admin-faccao";
+
+        const nome = dados.nome || id;
+        const estado = (dados.estado || "livre").toLowerCase().trim();
+        const lideranca = dados.lideranca || "";
+        const imagem = dados.imagem || "";
+        const video = dados.video || "";
+
+        card.innerHTML = `
+            <div>
+                <h3>${nome}</h3>
+                <span style="display: block; font-size: 11px; opacity: 0.6; margin-bottom: 12px;">Estado atual: <strong>${estado}</strong></span>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <input type="text" class="input-lider" value="${lideranca}" placeholder="Nome do Líder" style="width: 100%; box-sizing: border-box; padding: 8px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: inherit; font-size: 13px; outline: none;">
+                    <input type="text" class="input-imagem" value="${imagem}" placeholder="Link/Caminho da Imagem/Logo" style="width: 100%; box-sizing: border-box; padding: 8px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: inherit; font-size: 13px; outline: none;">
+                    <input type="text" class="input-video" value="${video}" placeholder="Link/Caminho do Vídeo QG" style="width: 100%; box-sizing: border-box; padding: 8px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: inherit; font-size: 13px; outline: none;">
+                </div>
+            </div>
+
+            <div>
+                <select class="input-estado">
+                    <option value="livre" ${estado === "livre" ? "selected" : ""}>🟢 Livre</option>
+                    <option value="ocupada" ${estado === "ocupada" ? "selected" : ""}>🔴 Ocupada</option>
+                    <option value="guerra" ${estado === "guerra" ? "selected" : ""}>🟠 Em Guerra</option>
+                </select>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="guardar" style="width: 100%;">Guardar</button>
+                <button class="btn-eliminar" style="width: 100%; padding: 12px 20px; border-radius: 9px; background: #8B0000; color: #fff; border: none; font-family: inherit; font-weight: 700; cursor: pointer; transition: 0.2s;">Eliminar</button>
+            </div>
+        `;
+
+        const selectEstado = card.querySelector(".input-estado");
+        const inputLider = card.querySelector(".input-lider");
+        const inputImagem = card.querySelector(".input-imagem");
+        const inputVideo = card.querySelector(".input-video");
+        const btnGuardar = card.querySelector(".guardar");
+        const btnEliminar = card.querySelector(".btn-eliminar");
+
+        btnGuardar.addEventListener("click", async () => {
+            btnGuardar.disabled = true;
+            btnGuardar.textContent = "A guardar...";
+
+            try {
+                await updateDoc(doc(db, "faccoes", id), {
+                    estado: selectEstado.value,
+                    lideranca: inputLider.value.trim(),
+                    imagem: inputImagem.value.trim(),
+                    video: inputVideo.value.trim()
+                });
+
+                if (saveMessage) saveMessage.textContent = `${nome} atualizada com sucesso.`;
+                await carregarFaccoes();
+            } catch (error) {
+                console.error("Erro ao guardar:", error);
+                if (saveMessage) saveMessage.textContent = "Erro ao guardar a alteração.";
+                btnGuardar.disabled = false;
+                btnGuardar.textContent = "Guardar";
+            }
+        });
+
+        btnEliminar.addEventListener("click", async () => {
+            if (!confirm(`Tens a certeza que queres eliminar a facção "${nome}"?`)) {
+                return;
+            }
+
+            btnEliminar.disabled = true;
+            btnEliminar.textContent = "...";
+
+            try {
+                await deleteDoc(doc(db, "faccoes", id));
+                if (saveMessage) saveMessage.textContent = `Facção "${nome}" eliminada.`;
+                await carregarFaccoes();
+            } catch (error) {
+                console.error("Erro ao eliminar facção:", error);
+                if (saveMessage) saveMessage.textContent = "Erro ao eliminar a facção.";
+                btnEliminar.disabled = false;
+                btnEliminar.textContent = "Eliminar";
+            }
+        });
+
+        adminFaccoes.appendChild(card);
+    }
+</script>
+
+</body>
+</html>

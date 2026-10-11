@@ -1,0 +1,526 @@
+/*==================================================
+                MALTA RP - ORGs
+                    HOME.CSS
+==================================================*/
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    position:relative;
+    min-height:620px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:80px 25px;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #020617 0%,
+            #0f172a 50%,
+            #172554 100%
+        );
+}
+
+/* brilho de fundo */
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+    height:500px;
+
+    background:#2563eb;
+
+    border-radius:50%;
+
+    filter:blur(180px);
+
+    opacity:.18;
+
+    top:-200px;
+    right:-100px;
+
+    pointer-events:none;
+}
+
+/* segundo brilho */
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    background:#3b82f6;
+
+    border-radius:50%;
+
+    filter:blur(180px);
+
+    opacity:.12;
+
+    bottom:-200px;
+    left:-100px;
+
+    pointer-events:none;
+}
+
+/* overlay */
+
+.hero .overlay{
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 0%,
+            rgba(2,6,23,.45) 70%,
+            rgba(2,6,23,.9) 100%
+        );
+
+    pointer-events:none;
+}
+
+/* conteúdo */
+
+.hero-content{
+    position:relative;
+
+    z-index:2;
+
+    width:100%;
+    max-width:900px;
+
+    animation:heroEntrada .8s ease;
+}
+
+@keyframes heroEntrada{
+
+    from{
+        opacity:0;
+        transform:translateY(35px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* título */
+
+.hero-content h1{
+
+    font-size:clamp(42px,7vw,76px);
+
+    line-height:1.1;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #60a5fa
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+
+}
+
+/* descrição */
+
+.hero-content p{
+
+    max-width:750px;
+
+    margin:0 auto 35px;
+
+    color:#cbd5e1;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+}
+
+/* botões */
+
+.buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+}
+
+/* =========================
+   CARDS PRINCIPAIS
+========================= */
+
+.cards{
+
+    width:90%;
+
+    max-width:1250px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:25px;
+
+    padding-top:80px;
+
+    padding-bottom:80px;
+
+}
+
+/* card */
+
+.cards .card{
+
+    padding:35px 30px;
+
+    text-align:center;
+
+    position:relative;
+
+    min-height:300px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111827,
+            #0f172a
+        );
+
+}
+
+/* linha superior */
+
+.cards .card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #2563eb,
+            transparent
+        );
+
+    opacity:.8;
+
+}
+
+/* ícones */
+
+.cards .card img{
+
+    width:75px;
+
+    height:75px;
+
+    object-fit:contain;
+
+    margin-bottom:25px;
+
+    transition:.4s;
+
+}
+
+/* hover ícone */
+
+.cards .card:hover img{
+
+    transform:
+        scale(1.12)
+        rotate(3deg);
+
+}
+
+/* título */
+
+.cards .card h2{
+
+    font-size:24px;
+
+    margin-bottom:12px;
+
+}
+
+/* texto */
+
+.cards .card p{
+
+    font-size:15px;
+
+    color:#94a3b8;
+
+    max-width:330px;
+
+}
+
+/* =========================
+   DISCORD
+========================= */
+
+.discord{
+
+    width:90%;
+
+    max-width:1100px;
+
+    margin:0 auto 80px;
+
+    padding:55px 30px;
+
+    text-align:center;
+
+    border-radius:20px;
+
+    border:1px solid #1e3a8a;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,.14),
+            rgba(15,23,42,.8)
+        );
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* brilho */
+
+.discord::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    background:#2563eb;
+
+    border-radius:50%;
+
+    filter:blur(140px);
+
+    opacity:.15;
+
+    top:-200px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+}
+
+/* conteúdo */
+
+.discord h2{
+
+    position:relative;
+
+    font-size:32px;
+
+    margin-bottom:10px;
+
+}
+
+.discord p{
+
+    position:relative;
+
+    margin-bottom:25px;
+
+}
+
+/* botão */
+
+.discord a{
+
+    position:relative;
+
+    display:inline-block;
+
+    padding:14px 28px;
+
+    background:#2563eb;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.discord a:hover{
+
+    background:#3b82f6;
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(37,99,235,.35);
+
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    margin-top:0;
+
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:1000px){
+
+    .cards{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    .hero{
+
+        min-height:560px;
+
+        padding:60px 20px;
+
+    }
+
+    .hero-content p{
+
+        font-size:16px;
+
+    }
+
+    .cards{
+
+        width:92%;
+
+        grid-template-columns:1fr;
+
+        padding-top:50px;
+
+        padding-bottom:50px;
+
+    }
+
+    .cards .card{
+
+        min-height:260px;
+
+    }
+
+    .discord{
+
+        width:92%;
+
+        padding:45px 20px;
+
+    }
+
+    .discord h2{
+
+        font-size:27px;
+
+    }
+
+}
+
+@media(max-width:450px){
+
+    .hero-content h1{
+
+        font-size:40px;
+
+    }
+
+    .hero-content p{
+
+        font-size:15px;
+
+    }
+
+    .buttons{
+
+        flex-direction:column;
+
+        width:100%;
+
+    }
+
+    .buttons .btn{
+
+        width:100%;
+
+    }
+
+}
